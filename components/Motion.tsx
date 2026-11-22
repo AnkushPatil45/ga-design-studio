@@ -54,6 +54,7 @@ export default function Motion() {
   // Reveals. Rebuilt when the language changes because text length changes the layout.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let mmRef: gsap.MatchMedia | undefined;
     const ctx = gsap.context(() => {
       const io = (el: Element, start = "top 86%") => ({ trigger: el, start, once: true });
 
@@ -64,11 +65,13 @@ export default function Motion() {
       });
 
       gsap.utils.toArray<HTMLElement>("main .section .display").forEach((el) => {
-        gsap.from(el.children.length ? el.children : el, { yPercent: 40, opacity: 0, duration: 1.1, ease: "power3.out", stagger: 0.12, scrollTrigger: io(el) });
+        gsap.fromTo(el.children.length ? el.children : el,
+          { yPercent: 105, clipPath: "inset(-15% 0 100% 0)" },
+          { yPercent: 0, clipPath: "inset(-15% 0 -25% 0)", duration: 1.25, ease: "power4.out", stagger: 0.1, scrollTrigger: io(el), clearProps: "clipPath" });
       });
 
       gsap.utils.toArray<HTMLElement>(
-        ".lead, .body, .people, .filters, .city-list li, .contact__card, .form, .value, .step__no, .step__name, .step__text, .project__body, .studio__figure figcaption, .footer__links, .footer__brand"
+        ".lead, .body, .people, .filters, .city-list li, .contact__card, .form, .value__name, .value__text, .project__note, .project__meta, .project__name, .studio__figure figcaption, .footer__links, .footer__brand"
       ).forEach((el) => {
         gsap.from(el, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", scrollTrigger: io(el, "top 92%") });
       });
@@ -76,16 +79,51 @@ export default function Motion() {
       gsap.utils.toArray<HTMLElement>(".cropped").forEach((el) => {
         const img = el.querySelector(".photo");
         const tl = gsap.timeline({ scrollTrigger: io(el, "top 88%") });
-        tl.fromTo(el, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.3, ease: "power4.inOut", clearProps: "clipPath" });
-        if (img) tl.from(img, { scale: 1.18, duration: 1.8, ease: "power3.out" }, 0);
+        tl.fromTo(el, { clipPath: "inset(100% 0% 0% 0% round 50% 50% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0% round 0% 0% 0% 0%)", duration: 1.5, ease: "power4.inOut", clearProps: "clipPath" });
+        if (img) tl.from(img, { scale: 1.25, duration: 2, ease: "power3.out" }, 0);
+        const inner = el.querySelector(".photo img");
+        if (inner) gsap.fromTo(inner, { yPercent: -6, scale: 1.12 }, { yPercent: 6, scale: 1.12, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } });
       });
 
-      gsap.utils.toArray<HTMLElement>(".step").forEach((el, i) => {
-        const path = el.querySelector(".step__arch path");
-        const img = el.querySelector(".step__media .photo");
-        const tl = gsap.timeline({ scrollTrigger: io(el, "top 88%"), delay: (i % 4) * 0.12 });
-        if (path) tl.fromTo(path, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
-        if (img) tl.from(img, { scale: 1.2, opacity: 0, duration: 1.4, ease: "power3.out" }, 0.3);
+      const mm = gsap.matchMedia();
+      mmRef = mm;
+      mm.add("(min-width: 1001px) and (min-height: 700px)", () => {
+        const sec = document.querySelector("#process") as HTMLElement | null;
+        if (!sec) return;
+        const steps = gsap.utils.toArray<HTMLElement>(".step");
+        const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: "top top", end: "+=140%", pin: true, scrub: 0.6, anticipatePin: 1 } });
+        tl.from(sec.querySelectorAll(".dim-line__bar"), { scaleX: 0, ease: "none", duration: 0.6 }, 0);
+        steps.forEach((el, i) => {
+          const at = 0.15 + i * 0.55;
+          const path = el.querySelector(".step__arch path");
+          if (path) tl.fromTo(path, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: "none", duration: 0.7 }, at);
+          tl.fromTo(el.querySelector(".step__media .photo"), { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "power2.inOut", duration: 0.6 }, at + 0.15);
+          tl.from(el.querySelectorAll(".step__no, .step__name, .step__text"), { y: 30, opacity: 0, stagger: 0.06, duration: 0.4 }, at + 0.35);
+        });
+        tl.to({}, { duration: 0.4 });
+      });
+      mm.add("(max-width: 1000px), (max-height: 699px)", () => {
+        gsap.utils.toArray<HTMLElement>(".step").forEach((el, i) => {
+          const path = el.querySelector(".step__arch path");
+          const img = el.querySelector(".step__media .photo");
+          const tl = gsap.timeline({ scrollTrigger: io(el, "top 92%"), delay: (i % 2) * 0.12 });
+          if (path) tl.fromTo(path, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
+          if (img) tl.from(img, { scale: 1.2, opacity: 0, duration: 1.4, ease: "power3.out" }, 0.3);
+          tl.from(el.querySelectorAll(".step__no, .step__name, .step__text"), { y: 20, opacity: 0, stagger: 0.08, duration: 0.8 }, 0.4);
+        });
+      });
+
+      // studio model drifts slower than the page
+      const model = document.querySelector(".studio__figure .photo img");
+      if (model) gsap.fromTo(model, { yPercent: -8, scale: 1.16 }, { yPercent: 8, scale: 1.16, ease: "none", scrollTrigger: { trigger: model, start: "top bottom", end: "bottom top", scrub: true } });
+
+      // value numerals rise one after another
+      gsap.from(".value__no", { yPercent: 60, opacity: 0, stagger: 0.15, duration: 1, ease: "power3.out", scrollTrigger: io(document.querySelector(".values")!, "top 85%") });
+
+      // project numbers slide in beside their names
+      gsap.utils.toArray<HTMLElement>(".project__no").forEach((el) => {
+        gsap.from(el, { xPercent: -60, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: io(el, "top 92%") });
       });
 
       gsap.utils.toArray<HTMLElement>(".value__bar").forEach((el) => {
@@ -119,6 +157,7 @@ export default function Motion() {
     return () => {
       window.removeEventListener("load", refresh);
       window.clearTimeout(t);
+      mmRef?.revert();
       ctx.revert();
     };
   }, [lang]);
