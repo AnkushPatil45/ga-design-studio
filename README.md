@@ -6,12 +6,19 @@ Website for GA Design Studio, an architecture practice working across Dhule, Nas
 
 ## Brand
 
-Three identity concepts. Boards are in `brand/boards/`. Every logo is in `brand/logos/<concept>/` as SVG: detailed mark, simple mark, horizontal lockup, each in dark, light and transparent.
+**Final logo: Mehrab.** A pointed arch drawn from two true arcs, a jaali lattice, an eight point star keystone and three steps for Creativity, Values and Freedom, framing a classical GA monogram.
 
-| Concept | Idea | Palette | Type |
-| --- | --- | --- | --- |
-| 01 Massing | G and A extruded from the page into isometric volumes | Charcoal, Limestone, Taupe, Laterite | Archivo Expanded |
-| 02 Mehrab | Pointed arch from two arcs, jaali lattice, star keystone, serif GA | Neem Green, Temple Brass, Ivory, Basalt | Cormorant Garamond |
-| 03 Compass | The A is a drafting compass that draws the G | Drafting Paper, Graphite, Terracotta, Pencil | Instrument Serif |
+`brand/logo/`
+- `svg/` and `png/`: detailed mark, simple mark, one colour marks (brass, ivory, green), horizontal, stacked and Marathi lockups. Dark, light and transparent versions.
+- `favicon/`: simplified mark for small sizes. SVG, ICO, 16, 32, 180, 192 and 512 px.
 
-Marathi set in Tiro Devanagari Marathi. Supporting text in IBM Plex Mono. All fonts are open licence.
+| Colour | Hex |
+| --- | --- |
+| Neem Green | `#0F2A22` |
+| Temple Brass | `#C9A45C` |
+| Ivory | `#F1E8D6` |
+| Basalt | `#2B2E2C` |
+
+Type: Cormorant Garamond (display), IBM Plex Mono (text), Tiro Devanagari Marathi (Marathi). All open licence.
+
+`brand/logo-prototypes/` keeps all three explored concepts (Massing, Mehrab, Compass) with their brand boards.
