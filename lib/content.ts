@@ -1,3 +1,5 @@
+import type { ImageName } from "./images";
+
 export type Lang = "en" | "mr";
 
 // Placeholder contact details. Replace before launch.
@@ -13,7 +15,9 @@ export type ProjectCategory = "homes" | "education" | "commercial" | "residentia
 export type Project = {
   id: string;
   name: string;
-  image: string;
+  image: ImageName;
+  story: { en: string; mr: string };
+  materials: { en: string; mr: string };
   category: ProjectCategory;
   year: string;
   area: string;
@@ -26,8 +30,13 @@ export type Project = {
 export const PROJECTS: Project[] = [
   {
     id: "01",
+    story: {
+      en: "A family of three generations asked for one thing: a house where everyone could see the sky. The rooms wrap a single neem tree, so every bedroom, the kitchen and the puja room open onto the same courtyard and the same shade.",
+      mr: "तीन पिढ्यांच्या कुटुंबाची एकच इच्छा होती: असे घर जिथून प्रत्येकाला आकाश दिसेल. सर्व खोल्या एका कडुनिंबाभोवती आहेत, त्यामुळे प्रत्येक शयनकक्ष, स्वयंपाकघर आणि देवघर एकाच अंगणात आणि एकाच सावलीत उघडतात.",
+    },
+    materials: { en: "Black basalt, lime plaster, kota stone, teak", mr: "काळा बेसाल्ट, चुन्याचा गिलावा, कोटा स्टोन, सागवान" },
     name: "Neem Courtyard House",
-    image: "/images/work-courtyard-house.jpg",
+    image: "work-courtyard-house",
     category: "homes",
     year: "2025",
     area: "4,200 sq ft",
@@ -40,8 +49,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "02",
+    story: {
+      en: "A weekend home for a family who grow grapes. The bedrooms float in a single concrete volume above a glass living room, so the view of the vines runs uninterrupted from the pool to the hills.",
+      mr: "द्राक्ष बागायतदार कुटुंबासाठी विकेंड होम. शयनकक्ष काचेच्या दिवाणखान्यावर तरंगणाऱ्या एकाच काँक्रीट खंडात आहेत, त्यामुळे तलावापासून डोंगरांपर्यंत द्राक्षबागेचे दृश्य अखंड दिसते.",
+    },
+    materials: { en: "Board formed concrete, teak louvres, Nashik stone", mr: "फळीच्या साच्यातील काँक्रीट, सागवानी लूव्हर, नाशिक दगड" },
     name: "Vineyard House",
-    image: "/images/work-vineyard-villa.jpg",
+    image: "work-vineyard-villa",
     category: "homes",
     year: "2024",
     area: "6,800 sq ft",
@@ -54,8 +68,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "03",
+    story: {
+      en: "A campus for 900 students where every corridor is a verandah. Terracotta jaali walls filter the Dhule sun and pull the breeze through, keeping classrooms cool without air conditioning.",
+      mr: "९०० विद्यार्थ्यांसाठीचा परिसर, जिथे प्रत्येक व्हरांडा ओसरीसारखा आहे. टेराकोटा जाळीच्या भिंती धुळ्याचे ऊन गाळतात आणि वारा खेळता ठेवतात, त्यामुळे वर्ग वातानुकूलनाशिवाय थंड राहतात.",
+    },
+    materials: { en: "Terracotta jaali, exposed concrete, kota stone", mr: "टेराकोटा जाळी, उघडे काँक्रीट, कोटा स्टोन" },
     name: "Jaali School",
-    image: "/images/work-school.jpg",
+    image: "work-school",
     category: "education",
     year: "2024",
     area: "38,000 sq ft",
@@ -68,8 +87,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "04",
+    story: {
+      en: "Six floors of offices behind a screen of terracotta fins. Each fin is angled to block the afternoon sun while keeping the view of the rain trees, cutting cooling loads by nearly a third.",
+      mr: "टेराकोटा फिन्सच्या पडद्यामागे सहा मजली कार्यालये. प्रत्येक फिन दुपारचे ऊन रोखण्यासाठी कोनात बसवली आहे, तरी झाडांचे दृश्य कायम राहते. यामुळे थंड ठेवण्याचा खर्च जवळपास एक तृतीयांशाने कमी होतो.",
+    },
+    materials: { en: "Terracotta fins, fair faced concrete, granite", mr: "टेराकोटा फिन्स, स्वच्छ काँक्रीट, ग्रॅनाइट" },
     name: "Terracotta Offices",
-    image: "/images/work-office-pune.jpg",
+    image: "work-office-pune",
     category: "commercial",
     year: "2025",
     area: "52,000 sq ft",
@@ -82,8 +106,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "05",
+    story: {
+      en: "A slender tower designed around a hundred year old banyan that the client refused to cut. Deep balconies with built in planters give every home a garden in the sky.",
+      mr: "शंभर वर्षांचा वड न तोडण्याचा आग्रह धरणाऱ्या ग्राहकासाठी त्या वडाभोवती आखलेला सडपातळ टॉवर. अंगभूत कुंड्यांसह खोल बाल्कन्यांमुळे प्रत्येक घराला आकाशात बाग मिळते.",
+    },
+    materials: { en: "Exposed concrete, teak screens, planted balconies", mr: "उघडे काँक्रीट, सागवानी पडदे, हिरव्या बाल्कन्या" },
     name: "Banyan Residences",
-    image: "/images/work-residence-mumbai.jpg",
+    image: "work-residence-mumbai",
     category: "residential",
     year: "2026",
     area: "18 floors",
@@ -96,8 +125,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "06",
+    story: {
+      en: "The interior of a Pune home stripped back to light and material. A dry stacked basalt wall holds the warmth of the day, and a tall jaali turns the morning sun into a pattern that moves across the room.",
+      mr: "पुण्यातील घराचे इंटिरिअर, फक्त प्रकाश आणि साहित्यावर आधारित. कोरड्या रचलेल्या बेसाल्टची भिंत दिवसाची ऊब धरून ठेवते आणि उंच जाळी सकाळच्या उन्हाला खोलीभर फिरणाऱ्या नक्षीत बदलते.",
+    },
+    materials: { en: "Dry stacked basalt, lime plaster, teak, brass", mr: "रचलेला बेसाल्ट, चुन्याचा गिलावा, सागवान, पितळ" },
     name: "Basalt House Interiors",
-    image: "/images/work-interior.jpg",
+    image: "work-interior",
     category: "homes",
     year: "2025",
     area: "3,100 sq ft",
@@ -151,16 +185,21 @@ const en = {
     label: "Selected Work",
     title: "Buildings that belong where they stand.",
     filters: { all: "All", homes: "Homes", education: "Education", commercial: "Commercial", residential: "Residential" },
-    fields: { project: "Project", location: "Location", type: "Type", year: "Year", area: "Area" },
+    fields: { project: "Project", location: "Location", type: "Type", year: "Year", area: "Area", materials: "Materials" },
+    open: "View project",
+    prev: "Previous",
+    next: "Next",
+    close: "Close",
+    sheet: "Sheet",
   },
   process: {
     label: "Process",
     title: "From the first line to the front door.",
     steps: [
-      { name: "Listen and sketch", text: "We understand your site, your way of living and your budget before the first line is drawn.", image: "/images/studio-drawing-table.jpg" },
-      { name: "Choose materials", text: "Basalt, teak, terracotta and lime. Local, lasting materials chosen with care.", image: "/images/process-materials.jpg" },
-      { name: "Build", text: "Built exactly to drawing, under Shoaib's direct supervision on site.", image: "/images/process-site.jpg" },
-      { name: "Hand over", text: "On time and on budget. The keys to your new home, in your hands.", image: "/images/process-handover.jpg" },
+      { name: "Listen and sketch", text: "We understand your site, your way of living and your budget before the first line is drawn.", image: "studio-drawing-table" },
+      { name: "Choose materials", text: "Basalt, teak, terracotta and lime. Local, lasting materials chosen with care.", image: "process-materials" },
+      { name: "Build", text: "Built exactly to drawing, under Shoaib's direct supervision on site.", image: "process-site" },
+      { name: "Hand over", text: "On time and on budget. The keys to your new home, in your hands.", image: "process-handover" },
     ],
   },
   cities: {
@@ -234,16 +273,21 @@ const mr: Dict = {
     label: "निवडक प्रकल्प",
     title: "आपल्या जागेशी नाते जपणाऱ्या वास्तू.",
     filters: { all: "सर्व", homes: "घरे", education: "शिक्षण", commercial: "व्यावसायिक", residential: "निवासी" },
-    fields: { project: "प्रकल्प", location: "ठिकाण", type: "प्रकार", year: "वर्ष", area: "क्षेत्रफळ" },
+    fields: { project: "प्रकल्प", location: "ठिकाण", type: "प्रकार", year: "वर्ष", area: "क्षेत्रफळ", materials: "साहित्य" },
+    open: "प्रकल्प पाहा",
+    prev: "मागील",
+    next: "पुढील",
+    close: "बंद",
+    sheet: "पत्रक",
   },
   process: {
     label: "प्रक्रिया",
     title: "पहिल्या रेषेपासून घराच्या दारापर्यंत.",
     steps: [
-      { name: "ऐकणे आणि रेखाटन", text: "पहिली रेषा काढण्यापूर्वी तुमची जागा, तुमची जीवनशैली आणि तुमचे बजेट आम्ही समजून घेतो.", image: "/images/studio-drawing-table.jpg" },
-      { name: "साहित्य निवड", text: "बेसाल्ट, सागवान, टेराकोटा आणि चुना. स्थानिक, टिकाऊ साहित्याची काळजीपूर्वक निवड.", image: "/images/process-materials.jpg" },
-      { name: "बांधकाम", text: "शोएब यांच्या प्रत्यक्ष देखरेखीखाली, आराखड्याप्रमाणे काटेकोर बांधकाम.", image: "/images/process-site.jpg" },
-      { name: "हस्तांतरण", text: "वेळेवर आणि बजेटमध्ये. तुमच्या नव्या घराची चावी तुमच्या हातात.", image: "/images/process-handover.jpg" },
+      { name: "ऐकणे आणि रेखाटन", text: "पहिली रेषा काढण्यापूर्वी तुमची जागा, तुमची जीवनशैली आणि तुमचे बजेट आम्ही समजून घेतो.", image: "studio-drawing-table" },
+      { name: "साहित्य निवड", text: "बेसाल्ट, सागवान, टेराकोटा आणि चुना. स्थानिक, टिकाऊ साहित्याची काळजीपूर्वक निवड.", image: "process-materials" },
+      { name: "बांधकाम", text: "शोएब यांच्या प्रत्यक्ष देखरेखीखाली, आराखड्याप्रमाणे काटेकोर बांधकाम.", image: "process-site" },
+      { name: "हस्तांतरण", text: "वेळेवर आणि बजेटमध्ये. तुमच्या नव्या घराची चावी तुमच्या हातात.", image: "process-handover" },
     ],
   },
   cities: {

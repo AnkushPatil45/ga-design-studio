@@ -8,10 +8,12 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
 import Preloader from "@/components/Preloader";
+import { SkipLink, WhatsAppArch } from "@/components/Extras";
 
 export default function Home() {
   return (
     <>
+      <SkipLink />
       <Preloader />
       <Nav />
       <main>
@@ -23,6 +25,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppArch />
       <Motion />
     </>
   );

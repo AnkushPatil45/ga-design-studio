@@ -74,7 +74,7 @@ export default function Motion() {
       });
 
       gsap.utils.toArray<HTMLElement>(".cropped").forEach((el) => {
-        const img = el.querySelector("img");
+        const img = el.querySelector(".photo");
         const tl = gsap.timeline({ scrollTrigger: io(el, "top 88%") });
         tl.fromTo(el, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.3, ease: "power4.inOut", clearProps: "clipPath" });
         if (img) tl.from(img, { scale: 1.18, duration: 1.8, ease: "power3.out" }, 0);
@@ -82,7 +82,7 @@ export default function Motion() {
 
       gsap.utils.toArray<HTMLElement>(".step").forEach((el, i) => {
         const path = el.querySelector(".step__arch path");
-        const img = el.querySelector(".step__media img");
+        const img = el.querySelector(".step__media .photo");
         const tl = gsap.timeline({ scrollTrigger: io(el, "top 88%"), delay: (i % 4) * 0.12 });
         if (path) tl.fromTo(path, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
         if (img) tl.from(img, { scale: 1.2, opacity: 0, duration: 1.4, ease: "power3.out" }, 0.3);

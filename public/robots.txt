@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ankushpatil45.github.io/ga-design-studio/sitemap.xml
