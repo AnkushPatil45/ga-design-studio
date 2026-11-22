@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { PROJECTS, type ProjectCategory } from "@/lib/content";
 import { Cropped, SheetLabel, TitleBlock } from "./ui";
+import { asset } from "@/lib/asset";
 
 type Filter = "all" | ProjectCategory;
 const FILTERS: Filter[] = ["all", "homes", "education", "commercial", "residential"];
@@ -36,7 +37,7 @@ export default function Work() {
           {list.map((p, i) => (
             <article key={p.id} className={`project ${i === 0 && filter === "all" ? "project--feature" : ""}`}>
               <Cropped className="project__media">
-                <Image src={p.image} alt={`${p.name}, ${p.city[lang]}`} width={2400} height={1340} sizes="(max-width: 900px) 100vw, (max-width: 1400px) 60vw, 900px" />
+                <Image src={asset(p.image)} alt={`${p.name}, ${p.city[lang]}`} width={2400} height={1340} sizes="(max-width: 900px) 100vw, (max-width: 1400px) 60vw, 900px" />
               </Cropped>
               <div className="project__body">
                 <div className="project__heading">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
+import { asset } from "@/lib/asset";
 
 const LINKS = ["studio", "work", "process", "cities", "contact"] as const;
 
@@ -36,7 +37,7 @@ export default function Nav() {
     <header className={`nav ${scrolled ? "nav--scrolled" : ""} ${open ? "nav--open" : ""}`}>
       <div className="nav__inner">
         <a href="#top" className="nav__logo" aria-label="GA Design Studio, home">
-          <img src="/brand/lockup-horizontal-dark-transparent.svg" alt="GA Design Studio" width={260} height={56} />
+          <img src={asset("/brand/lockup-horizontal-dark-transparent.svg")} alt="GA Design Studio" width={260} height={56} />
         </a>
         <nav className="nav__links" aria-label="Primary">
           {LINKS.map((k, i) => (

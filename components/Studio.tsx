@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLang } from "@/lib/i18n";
 import { Cropped, SheetLabel } from "./ui";
+import { asset } from "@/lib/asset";
 
 const NUMERALS = ["I", "II", "III"];
 
@@ -50,7 +51,7 @@ export default function Studio() {
           </div>
           <figure className="studio__figure">
             <Cropped>
-              <Image src="/images/studio-model.jpg" alt={s.caption} width={1500} height={2009} sizes="(max-width: 900px) 100vw, 40vw" />
+              <Image src={asset("/images/studio-model.jpg")} alt={s.caption} width={1500} height={2009} sizes="(max-width: 900px) 100vw, 40vw" />
             </Cropped>
             <figcaption><span>FIG. 01</span>{s.caption}</figcaption>
           </figure>

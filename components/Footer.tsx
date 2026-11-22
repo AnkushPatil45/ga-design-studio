@@ -3,6 +3,7 @@
 import { useLang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
 import { LangToggle } from "./Nav";
+import { asset } from "@/lib/asset";
 
 const LINKS = ["studio", "work", "process", "cities", "contact"] as const;
 
@@ -15,7 +16,7 @@ export default function Footer() {
         <div className="footer__top">
           <img
             className="footer__logo"
-            src={lang === "mr" ? "/brand/lockup-marathi-dark.svg" : "/brand/lockup-horizontal-dark-transparent.svg"}
+            src={asset(lang === "mr" ? "/brand/lockup-marathi-dark.svg" : "/brand/lockup-horizontal-dark-transparent.svg")}
             alt="GA Design Studio"
             width={420}
             height={90}
