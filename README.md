@@ -4,6 +4,23 @@ Website for GA Design Studio, an architecture practice working across Dhule, Nas
 
 *Creativity, Values and Freedom.*
 
+## Website
+
+Next.js site with an English and Marathi toggle.
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build
+```
+
+- `app/` layout, global styles, fonts and icons
+- `components/` one file per section: Hero, Studio, Work, Process, Cities, Contact, Footer
+- `lib/content.ts` all copy in English and Marathi, projects, cities and contact details
+- `public/images/` project photography, `public/brand/` logo files
+
+Contact details and projects in `lib/content.ts` are placeholders until real ones are supplied.
+
 ## Brand
 
 **Final logo: Mehrab.** A pointed arch drawn from two true arcs, a jaali lattice, an eight point star keystone and three steps for Creativity, Values and Freedom, framing a classical GA monogram.
