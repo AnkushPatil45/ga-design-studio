@@ -22,7 +22,6 @@ export default function Cities() {
 
   return (
     <section id="cities" className="section section--green cities">
-      <div className="grid-paper" aria-hidden />
       <div className="container">
         <SheetLabel sheet="A–105" label={t.cities.label} />
         <div className="cities__grid">

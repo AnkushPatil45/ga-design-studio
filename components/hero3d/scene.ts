@@ -39,7 +39,8 @@ export type HeroScene = { setProgress: (p: number) => void; resize: () => void; 
 
 export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void): HeroScene {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  const small = Math.min(window.innerWidth, window.innerHeight) < 700;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.5 : 1.35));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.92;
@@ -207,7 +208,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
   const sun = new THREE.DirectionalLight("#ffe2b0", 0);
   sun.position.set(-22, 30, 26);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1536, 1536);
+  sun.shadow.mapSize.set(small ? 768 : 1024, small ? 768 : 1024);
   const sc = sun.shadow.camera;
   sc.left = -22; sc.right = 22; sc.top = 18; sc.bottom = -14; sc.near = 1; sc.far = 100;
   sun.shadow.bias = -0.0004;
@@ -223,7 +224,9 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
   const range = (p: number, a: number, b: number) => ease(clamp((p - a) / (b - a)));
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  let progress = 0;
+  let progress = 0;      // rendered value
+  let goal = 0;          // value scroll asked for
+  let raf = 0;
   let aspect = 1;
 
   function fitDistance(fovDeg: number, w: number, h: number) {
@@ -275,16 +278,32 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
   }
 
   resize();
+  renderer.shadowMap.autoUpdate = true;
   onReady?.();
+
+  // Rendering runs in its own frame loop and eases toward the scroll position,
+  // so scroll events never block on WebGL and small wheel steps glide.
+  let lastShadow = -1;
+  function frame() {
+    const d = goal - progress;
+    if (Math.abs(d) < 0.0004) { progress = goal; raf = 0; apply(); return; }
+    progress += d * 0.16;
+    // shadows only need refreshing when the camera has moved noticeably
+    const q = Math.round(progress * 120);
+    renderer.shadowMap.autoUpdate = q !== lastShadow;
+    lastShadow = q;
+    apply();
+    raf = requestAnimationFrame(frame);
+  }
 
   return {
     setProgress(p: number) {
-      if (Math.abs(p - progress) < 0.0005) return;
-      progress = p;
-      apply();
+      goal = p;
+      if (!raf) raf = requestAnimationFrame(frame);
     },
     resize,
     dispose() {
+      cancelAnimationFrame(raf);
       renderer.dispose();
       scene.traverse((o) => {
         const m = o as THREE.Mesh;

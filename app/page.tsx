@@ -7,10 +7,12 @@ import Cities from "@/components/Cities";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
+import Preloader from "@/components/Preloader";
 
 export default function Home() {
   return (
     <>
+      <Preloader />
       <Nav />
       <main>
         <Hero />

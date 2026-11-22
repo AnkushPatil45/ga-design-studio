@@ -7,7 +7,6 @@ export function SheetLabel({ sheet, label, tone = "dark" }: { sheet: string; lab
       <span className="sheet-label__no">{sheet}</span>
       <span className="sheet-label__rule" aria-hidden />
       <span className="sheet-label__text">{label}</span>
-      <ScaleBar />
     </div>
   );
 }

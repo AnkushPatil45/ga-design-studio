@@ -15,7 +15,13 @@ export default function Motion() {
   // Smooth scroll and anchor links.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.4,
+    });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
@@ -62,7 +68,7 @@ export default function Motion() {
       });
 
       gsap.utils.toArray<HTMLElement>(
-        ".lead, .body, .people, .filters, .city-list li, .contact__card, .form, .value, .step__no, .step__name, .step__text, .project__body, .studio__figure figcaption"
+        ".lead, .body, .people, .filters, .city-list li, .contact__card, .form, .value, .step__no, .step__name, .step__text, .project__body, .studio__figure figcaption, .footer__links, .footer__brand"
       ).forEach((el) => {
         gsap.from(el, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", scrollTrigger: io(el, "top 92%") });
       });
@@ -72,7 +78,6 @@ export default function Motion() {
         const tl = gsap.timeline({ scrollTrigger: io(el, "top 88%") });
         tl.fromTo(el, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.3, ease: "power4.inOut", clearProps: "clipPath" });
         if (img) tl.from(img, { scale: 1.18, duration: 1.8, ease: "power3.out" }, 0);
-        tl.from(el.querySelectorAll(".crop"), { opacity: 0, scale: 0.4, duration: 0.5, stagger: 0.05 }, 0.9);
       });
 
       gsap.utils.toArray<HTMLElement>(".step").forEach((el, i) => {

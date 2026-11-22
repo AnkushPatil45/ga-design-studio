@@ -96,7 +96,6 @@ export default function Hero() {
     <section id="top" ref={track} className={`hero-track hero-track--${mode}`}>
       <div className="hero">
         <div className="grid-paper" aria-hidden />
-        <div className="hero__frame" aria-hidden />
         <div className="hero__inner">
           <div className="hero__copy">
             <p className="eyebrow">{t.hero.eyebrow}</p>
@@ -111,27 +110,28 @@ export default function Hero() {
               <a href="#contact" className="btn btn--ghost">{t.hero.ctaSecondary}</a>
             </div>
           </div>
-          <div className="hero__stage">
-            <canvas ref={canvas} className="hero__canvas" aria-hidden />
-            <div ref={svgWrap} className="hero__drawing">
-              <HeroDrawing label={t.hero.sheet} />
-            </div>
-            {mode === "motion" && (
-              <div className="hero__stagebar" aria-hidden>
-                <span className="hero__stagebar-label">
-                  <b>0{stage + 1}</b> {t.hero.stages[stage]}
-                </span>
-                <span className="hero__stagebar-track"><span ref={bar} className="hero__stagebar-fill" /></span>
-                <span className="hero__stagebar-ticks">
-                  {t.hero.stages.map((s, i) => <i key={s} className={i <= stage ? "on" : ""} />)}
-                </span>
+          <div className="hero__stagewrap">
+            <div className="hero__stage">
+              <canvas ref={canvas} className="hero__canvas" aria-hidden />
+              <div ref={svgWrap} className="hero__drawing">
+                <HeroDrawing label={t.hero.sheet} />
               </div>
-            )}
+            </div>
           </div>
         </div>
         <div className="hero__foot">
           <span className="hero__scroll"><span className="hero__scroll-line" aria-hidden />{t.hero.scroll}</span>
-          <span className="hero__coords">20.90° N · 74.77° E</span>
+          {mode === "motion" && (
+            <div className="hero__stagebar" aria-hidden>
+              <span className="hero__stagebar-label">
+                <b>0{stage + 1}</b> {t.hero.stages[stage]}
+              </span>
+              <span className="hero__stagebar-track"><span ref={bar} className="hero__stagebar-fill" /></span>
+              <span className="hero__stagebar-ticks">
+                {t.hero.stages.map((x, i) => <i key={x} className={i <= stage ? "on" : ""} />)}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </section>

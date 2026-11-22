@@ -119,7 +119,7 @@ export const CITIES = [
 
 const en = {
   meta: { title: "GA Design Studio · Architects", description: "Architecture and construction across Dhule, Nashik, Mumbai and Pune." },
-  nav: { studio: "Studio", work: "Work", process: "Process", cities: "Cities", contact: "Contact", cta: "Start a project", menu: "Menu", close: "Close" },
+  nav: { studio: "Studio", work: "Work", process: "Process", cities: "Cities", contact: "Contact", cta: "Start a project", menu: "Index", close: "Close", plan: "Ground floor plan · GA Design Studio", courtyard: "Courtyard", lang: "Language", rooms: { studio: "Where it begins", work: "Six buildings", process: "Sketch to keys", cities: "Four cities", contact: "Let's talk" } },
   hero: {
     eyebrow: "Architecture · Dhule · Nashik · Mumbai · Pune",
     title1: "Every great building",
@@ -202,7 +202,7 @@ export type Dict = typeof en;
 
 const mr: Dict = {
   meta: { title: "जी ए डिझाईन स्टुडिओ · वास्तुविशारद", description: "धुळे, नाशिक, मुंबई आणि पुण्यात वास्तुरचना आणि बांधकाम." },
-  nav: { studio: "स्टुडिओ", work: "प्रकल्प", process: "प्रक्रिया", cities: "शहरे", contact: "संपर्क", cta: "प्रकल्प सुरू करा", menu: "मेनू", close: "बंद" },
+  nav: { studio: "स्टुडिओ", work: "प्रकल्प", process: "प्रक्रिया", cities: "शहरे", contact: "संपर्क", cta: "प्रकल्प सुरू करा", menu: "अनुक्रमणिका", close: "बंद", plan: "तळमजला आराखडा · जी ए डिझाईन स्टुडिओ", courtyard: "अंगण", lang: "भाषा", rooms: { studio: "जिथे सुरुवात होते", work: "सहा वास्तू", process: "रेखाटन ते चावी", cities: "चार शहरे", contact: "बोलूया" } },
   hero: {
     eyebrow: "वास्तुकला · धुळे · नाशिक · मुंबई · पुणे",
     title1: "प्रत्येक सुंदर वास्तूची",
@@ -266,8 +266,8 @@ const mr: Dict = {
     type: "प्रकल्पाचा प्रकार",
     message: "प्रकल्पाबद्दल सांगा",
     types: ["घर", "शाळा", "व्यावसायिक", "इंटिरिअर", "इतर"],
-    submit: "व्हॉट्सअॅपवर पाठवा",
-    note: "तुमच्या माहितीसह व्हॉट्सअॅप उघडेल.",
+    submit: "व्हॉट्सॲपवर पाठवा",
+    note: "तुमच्या माहितीसह व्हॉट्सॲप उघडेल.",
     visit: "स्टुडिओला भेट द्या",
     address: ["जय हिंद कॉलनी, देवपूर", "धुळे, महाराष्ट्र"],
     call: "फोन करा",

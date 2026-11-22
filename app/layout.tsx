@@ -21,6 +21,12 @@ const mono = localFont({
   display: "swap",
 });
 
+const sans = localFont({
+  src: [{ path: "./fonts/PlexSans.woff2", style: "normal", weight: "100 700" }],
+  variable: "--f-sans",
+  display: "swap",
+});
+
 const deva = localFont({
   src: [
     { path: "./fonts/TiroMarathi.woff2", style: "normal", weight: "400" },
@@ -43,7 +49,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-lang="en" className={`${display.variable} ${mono.variable} ${deva.variable}`}>
+    <html lang="en" data-lang="en" className={`${display.variable} ${mono.variable} ${sans.variable} ${deva.variable}`}>
       <body>
         <LangProvider>{children}</LangProvider>
       </body>
