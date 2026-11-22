@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.00 -85.30 162.83 165.70"><rect x="-2.0" y="-85.3" width="162.83" height="165.7" fill="#151412"/><defs><pattern id="hatch" width="4.2" height="4.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="4.2" stroke="#5A5048" stroke-width="0.7"/></pattern></defs><polygon points="48.5,14 12.12,-7 35.16,-20.3 71.53,0.7" fill="#8f8273" stroke="#8f8273" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="12.12,-7 12.12,-49 35.16,-62.3 35.16,-20.3" fill="#2c2824" stroke="#2c2824" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="60.62,35 60.62,-7 83.66,-20.3 83.66,21.7" fill="#2c2824" stroke="#2c2824" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="60.62,-7 33.95,-22.4 56.98,-35.7 83.66,-20.3" fill="#8f8273" stroke="#8f8273" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="60.62,-35 0,-70 23.04,-83.3 83.66,-48.3" fill="#8f8273" stroke="#8f8273" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="60.62,-21 60.62,-35 83.66,-48.3 83.66,-34.3" fill="#2c2824" stroke="#2c2824" stroke-width="0.5" stroke-linejoin="round"/>
+<path d="M0 0 L60.62 35 L60.62 -7 L33.95 -22.4 L33.95 -8.4 L48.5 -0 L48.5 14 L12.12 -7 L12.12 -49 L60.62 -21 L60.62 -35 L0 -70 Z" fill="#EFE8DC" fill-rule="evenodd" stroke="#EFE8DC" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="87.3,23.8 87.3,50.4 110.33,37.1 110.33,10.5" fill="#2c2824" stroke="#2c2824" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="87.3,8.4 87.3,9.8 110.33,-3.5 110.33,-4.9" fill="#C7683B" stroke="#C7683B" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="87.3,9.8 123.67,30.8 146.7,17.5 110.33,-3.5" fill="#C7683B" stroke="#C7683B" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="75.17,-4.2 105.48,-17.5 128.52,-30.8 98.21,-17.5" fill="#766c5f" stroke="#766c5f" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="135.79,30.8 135.79,78.4 158.83,65.1 158.83,17.5" fill="#2c2824" stroke="#2c2824" stroke-width="0.5" stroke-linejoin="round"/>
+<polygon points="105.48,-17.5 135.79,30.8 158.83,17.5 128.52,-30.8" fill="#766c5f" stroke="#766c5f" stroke-width="0.5" stroke-linejoin="round"/>
+<path d="M75.17 43.4 L75.17 -4.2 L105.48 -17.5 L135.79 30.8 L135.79 78.4 L123.67 71.4 L123.67 44.8 L87.3 23.8 L87.3 50.4 Z M87.3 9.8 L123.67 30.8 L123.67 29.4 L105.48 0.7 L87.3 8.4 Z" fill="#EFE8DC" fill-rule="evenodd" stroke="#EFE8DC" stroke-width="0.5" stroke-linejoin="round"/></svg>
