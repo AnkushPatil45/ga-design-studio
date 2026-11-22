@@ -130,6 +130,7 @@ const en = {
     ctaSecondary: "Talk to us",
     scroll: "Scroll to build",
     sheet: "Elevation 01",
+    stages: ["Drawing", "Massing", "Materials", "Built"],
   },
   studio: {
     label: "The Studio",
@@ -212,6 +213,7 @@ const mr: Dict = {
     ctaSecondary: "आमच्याशी बोला",
     scroll: "उभारणी पाहण्यासाठी स्क्रोल करा",
     sheet: "दर्शनी भाग ०१",
+    stages: ["आराखडा", "आकारमान", "साहित्य", "पूर्ण"],
   },
   studio: {
     label: "स्टुडिओ",

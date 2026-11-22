@@ -31,6 +31,7 @@ export default function Nav() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    window.dispatchEvent(new CustomEvent("ga:menu", { detail: open }));
   }, [open]);
 
   return (

@@ -60,6 +60,7 @@ export default function Studio() {
         <ol className="values">
           {s.values.map((v, i) => (
             <li key={v.name} className="value" style={{ ["--step" as string]: i }}>
+              <span className="value__bar" aria-hidden />
               <span className="value__no">{NUMERALS[i]}</span>
               <h3 className="value__name">{v.name}</h3>
               <p className="value__text">{v.text}</p>

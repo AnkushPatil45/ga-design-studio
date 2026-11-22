@@ -51,7 +51,7 @@ export default function Cities() {
               </pattern>
             </defs>
             <path d={sea} fill="url(#sea-hatch)" />
-            <polyline points={coast} className="map__coast" />
+            <polyline points={coast} className="map__coast" pathLength={1} />
             {[73, 74, 75].map((lo) => (
               <g key={lo}>
                 <line x1={px(lo)} y1={0} x2={px(lo)} y2={H} className="map__graticule" />
@@ -68,7 +68,7 @@ export default function Cities() {
             <text x={px(72.35)} y={py(18.6)} className="map__sea" transform={`rotate(-90 ${px(72.35)} ${py(18.6)})`}>{t.cities.sea}</text>
 
             {CITIES.filter((c) => !c.hq).map((c) => (
-              <line key={c.key} x1={px(hq.lon)} y1={py(hq.lat)} x2={px(c.lon)} y2={py(c.lat)} className="map__route" />
+              <line key={c.key} x1={px(hq.lon)} y1={py(hq.lat)} x2={px(c.lon)} y2={py(c.lat)} className="map__route" pathLength={1} />
             ))}
             {CITIES.map((c) => (
               <g key={c.key} transform={`translate(${px(c.lon)} ${py(c.lat)})`} className={c.hq ? "map__city map__city--hq" : "map__city"}>
