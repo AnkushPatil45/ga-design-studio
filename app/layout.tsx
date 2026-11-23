@@ -34,6 +34,7 @@ const deva = localFont({
   ],
   variable: "--f-deva",
   display: "swap",
+  preload: false,
 });
 
 const SITE = "https://ankushpatil45.github.io/ga-design-studio/";

@@ -51,7 +51,7 @@ export default function Cities() {
       const tl = gsap.timeline({
         defaults: { ease: "power2.inOut" },
         scrollTrigger: {
-          trigger: el, start: "top top", end: "+=260%", pin: true, scrub: 0.8, anticipatePin: 1,
+          trigger: el, start: "top top", end: "+=280%", pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1,
           onUpdate: (self) => {
             const p = self.progress;
             setActive(p < 0.14 ? -1 : p < 0.34 ? 0 : p < 0.53 ? 1 : p < 0.72 ? 2 : p < 0.86 ? 3 : 4);
@@ -77,7 +77,7 @@ export default function Cities() {
       tl.to(world, { x: 0, y: 0, scale: 1, duration: 1 }, at)
         .to(dot, { opacity: 0, duration: 0.2 }, at)
         .to(el.querySelector(".map__ticks"), { opacity: 1, duration: 0.4 }, at + 0.6)
-        .to({}, { duration: 0.6 });
+        .to({}, { duration: 1 });
       return () => setActive(-1);
     });
     // Phones and short screens: draw once, then the routes keep flowing and cities take turns.
@@ -92,7 +92,8 @@ export default function Cities() {
       const id = window.setInterval(() => { if (el.classList.contains("cities--alive")) setActive(i++ % 4); }, 2400);
       return () => { window.clearInterval(id); el.classList.remove("cities--alive"); setActive(-1); };
     });
-    return () => mm.revert();
+    const t = window.setTimeout(() => { ScrollTrigger.sort(); ScrollTrigger.refresh(); }, 700);
+    return () => { window.clearTimeout(t); mm.revert(); };
   }, [hq.lat, hq.lon]);
 
   const cur = active >= 0 && active < 4 ? CITIES[active] : null;

@@ -8,7 +8,6 @@ const Y = (y: number) => (500 - y) * PX;
 
 const BRASS = new THREE.Color("#c9a45c");
 
-type Fade = { mat: THREE.Material & { opacity: number }; from: number; to: number; max: number };
 
 function canvasTexture(w: number, h: number, draw: (c: CanvasRenderingContext2D) => void, repeat?: [number, number]) {
   const cv = document.createElement("canvas");
@@ -82,14 +81,9 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
   }, [5, 4]);
 
   /* ---------------------------------------------------------------- materials */
-  const fades: Fade[] = [];
   const edgesMats: THREE.LineBasicMaterial[] = [];
   const treeMats: THREE.LineBasicMaterial[] = [];
-  const std = (opts: THREE.MeshStandardMaterialParameters, from: number, to: number) => {
-    const m = new THREE.MeshStandardMaterial({ ...opts, transparent: true, opacity: 0 });
-    fades.push({ mat: m, from, to, max: opts.opacity ?? 1 });
-    return m;
-  };
+  const std = (opts: THREE.MeshStandardMaterialParameters, _from?: number, _to?: number) => new THREE.MeshStandardMaterial(opts);
   const M = {
     basalt: std({ map: basaltTex, roughness: 0.85, color: "#ffffff" }, 0.3, 0.48),
     plaster: std({ map: plasterTex, roughness: 0.95, color: "#ffffff" }, 0.38, 0.58),
@@ -104,51 +98,78 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
   const building = new THREE.Group();
   scene.add(building);
 
+  /* Every element belongs to a piece. Pieces fall from the sky, one after another, as you scroll. */
+  type Piece = { objs: THREE.Object3D[]; base: number[]; lines: THREE.LineBasicMaterial[]; gap: number; dur: number; tilt: number; dust: boolean; t0: number; t1: number; bottom: number; cx: number; cz: number; ring?: THREE.Mesh };
+  const pieces: Piece[] = [];
+  let cur: Piece | null = null;
+  const ghostMat = new THREE.LineBasicMaterial({ color: BRASS, transparent: true, opacity: 0, depthWrite: false });
+  const box3 = new THREE.Box3();
+  function piece(gap: number, fn: () => void, o: { dur?: number; tilt?: number; dust?: boolean } = {}) {
+    cur = { objs: [], base: [], lines: [], gap, dur: o.dur ?? 0.07, tilt: o.tilt ?? 0, dust: o.dust ?? false, t0: 0, t1: 0, bottom: 0, cx: 0, cz: 0 };
+    fn();
+    box3.makeEmpty();
+    for (const ob of cur.objs) if ((ob as THREE.Mesh).isMesh) box3.expandByObject(ob);
+    cur.bottom = box3.min.y; cur.cx = (box3.min.x + box3.max.x) / 2; cur.cz = (box3.min.z + box3.max.z) / 2;
+    if (cur.dust) {
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 48), new THREE.MeshBasicMaterial({ color: "#d9c08a", transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.set(cur.cx, cur.bottom + 0.02, cur.cz);
+      ring.scale.setScalar(Math.max(box3.max.x - box3.min.x, box3.max.z - box3.min.z) * 0.5);
+      ring.userData.s = ring.scale.x;
+      ring.visible = false;
+      scene.add(ring);
+      cur.ring = ring;
+    }
+    pieces.push(cur);
+    cur = null;
+  }
+
   function add(geo: THREE.BufferGeometry, mat: THREE.Material, pos: [number, number, number], opts: { edges?: boolean; cast?: boolean } = {}) {
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(...pos);
     mesh.castShadow = opts.cast ?? true;
     mesh.receiveShadow = true;
     building.add(mesh);
+    cur?.objs.push(mesh); cur?.base.push(mesh.position.y);
     if (opts.edges !== false) {
+      const eg = new THREE.EdgesGeometry(geo, 25);
       const lm = new THREE.LineBasicMaterial({ color: BRASS, transparent: true, opacity: 0, depthWrite: false });
       edgesMats.push(lm);
-      const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), lm);
+      const lines = new THREE.LineSegments(eg, lm);
       lines.position.copy(mesh.position);
       lines.renderOrder = 2;
       building.add(lines);
+      cur?.objs.push(lines); cur?.base.push(lines.position.y); cur?.lines.push(lm);
+      // the ghost outline stays put: the drawing the pieces fall into
+      const ghost = new THREE.LineSegments(eg, ghostMat);
+      ghost.position.copy(mesh.position);
+      building.add(ghost);
     }
     return mesh;
   }
   /** Box from SVG rect (x, y, w, h) with a depth and a front z. */
   function box(x: number, y: number, w: number, h: number, depth: number, mat: THREE.Material, zFront = 0, opts?: { edges?: boolean; cast?: boolean }) {
     const g = new THREE.BoxGeometry(w * PX, h * PX, depth);
-    return add(g, mat, [X(x + w / 2), Y(y + h), zFront - depth / 2].map((v, i) => (i === 1 ? v + (h * PX) / 2 : v)) as [number, number, number], opts);
+    return add(g, mat, [X(x + w / 2), Y(y + h) + (h * PX) / 2, zFront - depth / 2], opts);
   }
 
-  /* ---------------------------------------------------------------- the house */
-  box(110, 486, 660, 14, 13.4, M.basalt, 0.25);             // plinth
-  box(120, 330, 300, 156, 9, M.plaster);                     // left volume
-  box(100, 316, 340, 14, 10.2, M.slab, 0.6);                 // left roof slab
-  box(420, 170, 340, 316, 12, M.plaster);                    // right volume
-  box(410, 156, 380, 14, 13.2, M.slab, 0.6);                 // right roof slab
-  box(420, 326, 344, 8, 12.4, M.slab, 0.2, { edges: false }); // floor band
-
-  // jaali screen with dark recess behind
-  box(150, 360, 150, 110, 0.06, M.recess, 0.01, { edges: false, cast: false });
-  {
-    const g = new THREE.PlaneGeometry(150 * PX, 110 * PX);
-    add(g, M.jaali, [X(225), Y(415), 0.12]);
+  /* ---------------------------------------------------------------- the house, in build order */
+  piece(0, () => box(110, 486, 660, 14, 13.4, M.basalt, 0.25), { dust: true, dur: 0.08 });                   // plinth
+  piece(1, () => box(120, 330, 300, 156, 9, M.plaster), { dust: true, tilt: 0.05 });                          // left volume
+  piece(1, () => box(420, 170, 340, 316, 12, M.plaster), { dust: true, tilt: -0.04, dur: 0.08 });             // right volume
+  piece(0.7, () => box(420, 326, 344, 8, 12.4, M.slab, 0.2, { edges: false }), { dur: 0.05 });               // floor band
+  piece(0.8, () => box(100, 316, 340, 14, 10.2, M.slab, 0.6), { dust: true, tilt: -0.03 });                   // left roof slab
+  piece(0.8, () => box(410, 156, 380, 14, 13.2, M.slab, 0.6), { dust: true, tilt: 0.03 });                    // right roof slab
+  piece(0.8, () => {                                                                                            // jaali screen
+    box(150, 360, 150, 110, 0.06, M.recess, 0.01, { edges: false, cast: false });
+    add(new THREE.PlaneGeometry(150 * PX, 110 * PX), M.jaali, [X(225), Y(415), 0.12]);
+  }, { tilt: 0.06 });
+  piece(0.6, () => { box(330, 360, 66, 126, 0.08, M.glass, 0.04); box(362, 360, 2, 126, 0.12, M.brass, 0.07, { edges: false }); }, { dur: 0.05 });
+  piece(0.6, () => box(444, 190, 300, 120, 0.06, M.glass, 0.02), { dur: 0.05 });                              // upper glazing
+  let fin = 0;
+  for (let x = 452; x <= 732; x += 14) {                                                                       // teak fins rain down
+    piece(fin++ === 0 ? 0.6 : 0.14, () => box(x - 1.5, 190, 3.5, 120, 0.55, M.teak, 0.6, { edges: x % 56 === 4 }), { dur: 0.045 });
   }
-  // left glass door
-  box(330, 360, 66, 126, 0.08, M.glass, 0.04);
-  box(362, 360, 2, 126, 0.12, M.brass, 0.07, { edges: false });
-
-  // upper glazing and teak fins
-  box(444, 190, 300, 120, 0.06, M.glass, 0.02);
-  for (let x = 452; x <= 732; x += 14) box(x - 1.5, 190, 3.5, 120, 0.55, M.teak, 0.6, { edges: x % 56 === 4 });
-
-  // pointed arch entrance: teak door with brass frame
   {
     // Two arcs share their centres with the drawing; inset shrinks the radius for the door leaf.
     const arch = (inset: number) => {
@@ -163,13 +184,23 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
       s.closePath();
       return s;
     };
-    add(new THREE.ExtrudeGeometry(arch(0), { depth: 0.12, bevelEnabled: false, curveSegments: 32 }), M.brass, [0, 0, 0]);
-    add(new THREE.ExtrudeGeometry(arch(5), { depth: 0.1, bevelEnabled: false, curveSegments: 32 }), M.teak, [0, 0, 0.06], { edges: false });
+    piece(0.7, () => add(new THREE.ExtrudeGeometry(arch(0), { depth: 0.12, bevelEnabled: false, curveSegments: 32 }), M.brass, [0, 0, 0]), { dur: 0.06 });
+    piece(0.5, () => add(new THREE.ExtrudeGeometry(arch(5), { depth: 0.1, bevelEnabled: false, curveSegments: 32 }), M.teak, [0, 0, 0.06], { edges: false }), { dur: 0.05 });
   }
+  piece(0.6, () => { box(640, 360, 100, 110, 0.08, M.glass, 0.04); for (const x of [673, 707]) box(x - 1, 360, 2, 110, 0.12, M.brass, 0.08, { edges: false }); }, { dur: 0.05 });
 
-  // right window
-  box(640, 360, 100, 110, 0.08, M.glass, 0.04);
-  for (const x of [673, 707]) box(x - 1, 360, 2, 110, 0.12, M.brass, 0.08, { edges: false });
+  // schedule: spread the pieces between START and END of the scroll
+  {
+    const START = 0.17, END = 0.84;
+    const total = pieces.reduce((a, p) => a + p.gap, 0);
+    const lastDur = pieces[pieces.length - 1].dur;
+    let acc = 0;
+    for (const p of pieces) {
+      acc += p.gap;
+      p.t0 = START + (acc / total) * (END - START - lastDur);
+      p.t1 = p.t0 + p.dur;
+    }
+  }
 
   // neem tree, drawn as a brass wire model tree: stays a line drawing while the house becomes real
   {
@@ -234,38 +265,55 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
     return Math.max(h / 2 / t, w / 2 / (t * aspect));
   }
 
+  const DROP = 15;
+  const fall = (t: number) => (t < 0.78 ? 1 - (t / 0.78) ** 2 : 0);                  // gravity
+  const bounce = (t: number) => (t < 0.78 ? 0 : Math.sin(((t - 0.78) / 0.22) * Math.PI) * 0.05); // small rebound
+
   function apply() {
     const p = progress;
-    const orbit = range(p, 0.08, 0.62);
+    const orbit = range(p, 0.05, 0.3);
+    const drift = range(p, 0.3, 1);
     const fov = lerp(13, 30, orbit);
-    const az = lerp(0, -36, orbit);
-    const el = lerp(2, 15, orbit);
-    const dist = fitDistance(fov, lerp(23, 25, orbit), lerp(12, 15, orbit)) * lerp(1.08, 1.22, orbit);
+    const az = lerp(0, -32, orbit) + lerp(0, -10, drift);
+    const el = lerp(2, 16, orbit) + lerp(0, -3, drift);
+    const dist = fitDistance(fov, lerp(23, 25, orbit), lerp(12, 15, orbit)) * lerp(1.08, 1.24, orbit);
     camera.fov = fov;
     const a = THREE.MathUtils.degToRad(az), e = THREE.MathUtils.degToRad(el);
     camera.position.set(target.x + dist * Math.sin(a) * Math.cos(e), target.y + dist * Math.sin(e), target.z + dist * Math.cos(a) * Math.cos(e));
     camera.lookAt(target);
     camera.updateProjectionMatrix();
 
-    const lineIn = range(p, 0, 0.1);
-    const lineOut = range(p, 0.62, 0.9);
-    const lineOpacity = lineIn * lerp(1, 0.14, lineOut);
-    for (const m of edgesMats) m.opacity = lineOpacity;
+    const lineIn = range(p, 0, 0.08);
+    const settled = lerp(0.55, 0.12, range(p, 0.8, 0.95));
+    ghostMat.opacity = lineIn * lerp(0.75, 0.22, range(p, 0.1, 0.22)) * (1 - range(p, 0.84, 0.95));
     for (const m of treeMats) m.opacity = lineIn * 0.85;
     (grid.material as THREE.Material & { opacity: number }).opacity = lineIn * lerp(0.14, 0.06, orbit);
 
-    for (const f of fades) {
-      const o = range(p, f.from, f.to) * f.max;
-      f.mat.opacity = o;
-      const solid = o > 0.995;
-      if (f.mat.transparent === solid) { f.mat.transparent = !solid; f.mat.needsUpdate = true; }
+    for (const pc of pieces) {
+      const t = clamp((p - pc.t0) / (pc.t1 - pc.t0));
+      const shown = p >= pc.t0;
+      const off = DROP * (fall(t) + bounce(t));
+      pc.objs.forEach((ob, i) => {
+        ob.visible = shown;
+        ob.position.y = pc.base[i] + off;
+        if (pc.tilt) ob.rotation.z = pc.tilt * (1 - t) * (t < 0.78 ? 1 : 0);
+      });
+      const glow = t < 1 ? 1 : lerp(1, settled, clamp((p - pc.t1) / 0.06));
+      for (const lm of pc.lines) lm.opacity = shown ? glow : 0;
+      if (pc.ring) {
+        const d = clamp((p - (pc.t0 + (pc.t1 - pc.t0) * 0.78)) / 0.05);
+        pc.ring.visible = d > 0 && d < 1;
+        pc.ring.scale.setScalar(pc.ring.userData.s * (0.6 + d * 0.9));
+        (pc.ring.material as THREE.MeshBasicMaterial).opacity = (1 - d) * 0.55;
+      }
     }
-    const lit = range(p, 0.3, 0.8);
+
+    const lit = range(p, 0.08, 0.3);
     hemi.intensity = lerp(0, 1.1, lit);
     sun.intensity = lerp(0, 2.6, lit);
     fill.intensity = lerp(0, 0.5, lit);
-    shadowMat.opacity = lerp(0, 0.38, range(p, 0.55, 0.85));
-    (M.glass as THREE.MeshStandardMaterial).emissiveIntensity = lerp(0, 0.38, range(p, 0.78, 1));
+    shadowMat.opacity = lerp(0, 0.38, range(p, 0.2, 0.4));
+    (M.glass as THREE.MeshStandardMaterial).emissiveIntensity = lerp(0, 0.4, range(p, 0.86, 1));
     renderer.render(scene, camera);
   }
 
@@ -289,7 +337,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, onReady?: () => void)
     if (Math.abs(d) < 0.0004) { progress = goal; raf = 0; apply(); return; }
     progress += d * 0.16;
     // shadows only need refreshing when the camera has moved noticeably
-    const q = Math.round(progress * 120);
+    const q = Math.round(progress * 400);
     renderer.shadowMap.autoUpdate = q !== lastShadow;
     lastShadow = q;
     apply();

@@ -64,7 +64,7 @@ export default function Hero() {
       if (svgWrap.current) svgWrap.current.style.opacity = String(1 - range(p, 0.03, 0.13));
       if (canvas.current) canvas.current.style.opacity = scene ? String(range(p, 0.0, 0.09)) : "0";
       if (bar.current) bar.current.style.transform = `scaleX(${p})`;
-      const s = p < 0.18 ? 0 : p < 0.48 ? 1 : p < 0.8 ? 2 : 3;
+      const s = p < 0.17 ? 0 : p < 0.5 ? 1 : p < 0.85 ? 2 : 3;
       if (s !== last) { last = s; setStage(s); }
       scene?.setProgress(p);
     };

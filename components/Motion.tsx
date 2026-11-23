@@ -92,16 +92,16 @@ export default function Motion() {
         const sec = document.querySelector("#process") as HTMLElement | null;
         if (!sec) return;
         const steps = gsap.utils.toArray<HTMLElement>(".step");
-        const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: "top top", end: "+=140%", pin: true, scrub: 0.6, anticipatePin: 1 } });
+        const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: "top top", end: "+=230%", pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 2 } });
         tl.from(sec.querySelectorAll(".dim-line__bar"), { scaleX: 0, ease: "none", duration: 0.6 }, 0);
         steps.forEach((el, i) => {
-          const at = 0.15 + i * 0.55;
+          const at = 0.2 + i * 0.6;
           const path = el.querySelector(".step__arch path");
           if (path) tl.fromTo(path, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: "none", duration: 0.7 }, at);
-          tl.fromTo(el.querySelector(".step__media .photo"), { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "power2.inOut", duration: 0.6 }, at + 0.15);
+          tl.fromTo(el.querySelector(".step__media .photo"), { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "power2.inOut", duration: 0.7 }, at + 0.15);
           tl.from(el.querySelectorAll(".step__no, .step__name, .step__text"), { y: 30, opacity: 0, stagger: 0.06, duration: 0.4 }, at + 0.35);
         });
-        tl.to({}, { duration: 0.4 });
+        tl.to({}, { duration: 1.1 }); // hold the finished sheet before releasing
       });
       mm.add("(max-width: 1000px), (max-height: 699px)", () => {
         gsap.utils.toArray<HTMLElement>(".step").forEach((el, i) => {
@@ -146,7 +146,7 @@ export default function Motion() {
       }
     });
 
-    const refresh = () => ScrollTrigger.refresh();
+    const refresh = () => { ScrollTrigger.sort(); ScrollTrigger.refresh(); };
     window.addEventListener("load", refresh);
     const t = window.setTimeout(refresh, 600);
     return () => {
