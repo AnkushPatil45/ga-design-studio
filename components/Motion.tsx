@@ -71,7 +71,7 @@ export default function Motion() {
       });
 
       gsap.utils.toArray<HTMLElement>(
-        ".lead, .body, .people, .filters, .city-list li, .contact__card, .form, .value__name, .value__text, .project__note, .project__meta, .project__name, .studio__figure figcaption, .footer__links, .footer__brand"
+        ".lead, .body, .people, .filters, .contact__card, .form, .value__name, .value__text, .project__note, .project__meta, .project__name, .studio__figure figcaption"
       ).forEach((el) => {
         gsap.from(el, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", scrollTrigger: io(el, "top 92%") });
       });
@@ -134,21 +134,16 @@ export default function Motion() {
         gsap.from(el.querySelectorAll(".dim-line__bar"), { scaleX: 0, duration: 1.2, ease: "power3.inOut", scrollTrigger: io(el, "top 90%") });
       });
 
-      const map = document.querySelector(".map");
-      if (map) {
-        const tl = gsap.timeline({ scrollTrigger: io(map, "top 80%") });
-        tl.from(map.querySelectorAll(".map__graticule, .map__tick, .map__frame"), { opacity: 0, duration: 0.8, stagger: 0.02 })
-          .fromTo(map.querySelector(".map__coast"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, 0.2)
-          .from(map.querySelectorAll(".map__city"), { scale: 0, opacity: 0, transformOrigin: "center", duration: 0.6, ease: "back.out(2)", stagger: 0.15 }, 0.8)
-          .fromTo(map.querySelectorAll(".map__route"), { strokeDasharray: "1 0", strokeDashoffset: 1 }, {
-            strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut", stagger: 0.2,
-            onComplete() { gsap.set(map.querySelectorAll(".map__route"), { clearProps: "strokeDasharray,strokeDashoffset" }); },
-          }, 1.2);
+      // footer: the page lifts away, the giant arch draws behind the logo
+      const foot = document.querySelector(".footer");
+      const contact = document.querySelector("#contact");
+      if (foot && contact) {
+        const tl = gsap.timeline({ scrollTrigger: { trigger: contact, start: "bottom bottom", end: () => `+=${(foot as HTMLElement).offsetHeight}`, scrub: 0.6 } });
+        tl.fromTo(foot.querySelectorAll(".fa--outer, .fa--inner"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: "none", duration: 1 }, 0)
+          .fromTo(foot.querySelectorAll(".fa--step"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: "none", duration: 0.5, stagger: 0.12 }, 0.3)
+          .fromTo(foot.querySelector(".footer__inner"), { yPercent: 12, opacity: 0.2 }, { yPercent: 0, opacity: 1, ease: "power2.out", duration: 0.8 }, 0.1);
+        ScrollTrigger.create({ trigger: contact, start: "bottom 70%", onEnter: () => foot.classList.add("footer--in"), onLeaveBack: () => foot.classList.remove("footer--in") });
       }
-
-      gsap.utils.toArray<HTMLElement>(".footer__steps span").forEach((el, i) => {
-        gsap.from(el, { scaleX: 0, duration: 1.2, delay: i * 0.12, ease: "power3.inOut", scrollTrigger: io(el, "top 98%") });
-      });
     });
 
     const refresh = () => ScrollTrigger.refresh();

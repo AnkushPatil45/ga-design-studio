@@ -1,14 +1,32 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useLang } from "@/lib/i18n";
 import { CITIES, CONTACT } from "@/lib/content";
 import { SheetLabel } from "./ui";
+import ContactSketch from "./ContactSketch";
 
 export default function Contact() {
   const { t, lang } = useLang();
   const c = t.contact;
   const [sent, setSent] = useState(false);
+  const [stage, setStage] = useState(0);
+  const touched = useRef<Set<string>>(new Set());
+
+  function onInput(e: FormEvent<HTMLFormElement>) {
+    const f = e.currentTarget;
+    const target = e.target as HTMLInputElement;
+    if (target?.name) touched.current.add(target.name);
+    const d = new FormData(f);
+    const filled = (k: string) => String(d.get(k) ?? "").trim().length > 1;
+    let n = 0;
+    if (filled("name")) n++;
+    if (String(d.get("phone") ?? "").replace(/\D/g, "").length >= 6) n++;
+    if (touched.current.has("city")) n++;
+    if (touched.current.has("type")) n++;
+    if (filled("message")) n++;
+    setStage(n);
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,6 +44,7 @@ export default function Contact() {
     const url = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setSent(true);
+    setStage(5);
   }
 
   return (
@@ -56,11 +75,8 @@ export default function Contact() {
             </div>
           </div>
 
-          <form className="form" onSubmit={onSubmit}>
-            <div className="form__head" aria-hidden>
-              <span>FORM · A–106.1</span>
-              <span>{lang === "mr" ? "मराठी" : "EN"}</span>
-            </div>
+          <form className="form" onSubmit={onSubmit} onInput={onInput} onChange={onInput}>
+            <ContactSketch stage={stage} sent={sent} label={c.sketch} done={c.sketchDone} stamp={c.stamp} />
             <label className="field">
               <span>{c.name}</span>
               <input name="name" required autoComplete="name" />

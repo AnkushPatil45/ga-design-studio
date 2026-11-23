@@ -73,6 +73,7 @@ const JSON_LD = {
   founder: [{ "@type": "Person", name: "Farzeb Shaikh", jobTitle: "Principal Architect" }],
   employee: [{ "@type": "Person", name: "Shoaib Shaikh", jobTitle: "Civil Engineer" }],
   knowsLanguage: ["en", "mr"],
+  sameAs: ["https://www.instagram.com/farzebshaikh/"],
 };
 
 export const viewport: Viewport = {

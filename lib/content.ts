@@ -7,7 +7,7 @@ export const CONTACT = {
   phone: "+91 90000 00000",
   whatsapp: "919000000000",
   email: "hello@gadesignstudio.in",
-  instagram: "gadesignstudio",
+  instagram: "https://www.instagram.com/farzebshaikh/",
 };
 
 export type ProjectCategory = "homes" | "education" | "commercial" | "residential";
@@ -145,10 +145,14 @@ export const PROJECTS: Project[] = [
 ];
 
 export const CITIES = [
-  { key: "dhule", en: "Dhule", mr: "धुळे", lat: 20.9042, lon: 74.7749, hq: true },
-  { key: "nashik", en: "Nashik", mr: "नाशिक", lat: 19.9975, lon: 73.7898, hq: false },
-  { key: "mumbai", en: "Mumbai", mr: "मुंबई", lat: 19.076, lon: 72.8777, hq: false },
-  { key: "pune", en: "Pune", mr: "पुणे", lat: 18.5204, lon: 73.8567, hq: false },
+  { key: "dhule", en: "Dhule", mr: "धुळे", lat: 20.9042, lon: 74.7749, hq: true, km: 0,
+    line: { en: "Home of the studio. Where every drawing begins.", mr: "स्टुडिओचे घर. प्रत्येक आराखड्याची सुरुवात इथूनच." } },
+  { key: "nashik", en: "Nashik", mr: "नाशिक", lat: 19.9975, lon: 73.7898, hq: false, km: 160,
+    line: { en: "Vineyard homes and weekend retreats.", mr: "द्राक्षबागेतील घरे आणि विकेंड होम्स." } },
+  { key: "mumbai", en: "Mumbai", mr: "मुंबई", lat: 19.076, lon: 72.8777, hq: false, km: 320,
+    line: { en: "Towers that make room for trees.", mr: "झाडांसाठी जागा ठेवणारे टॉवर्स." } },
+  { key: "pune", en: "Pune", mr: "पुणे", lat: 18.5204, lon: 73.8567, hq: false, km: 330,
+    line: { en: "Offices, homes and interiors.", mr: "कार्यालये, घरे आणि इंटिरिअर." } },
 ];
 
 const en = {
@@ -210,6 +214,8 @@ const en = {
     hq: "Studio · HQ",
     site: "Projects",
     sea: "Arabian Sea",
+    km: "km from the studio",
+    all: "Four cities. One studio.",
   },
   contact: {
     label: "Contact",
@@ -229,11 +235,18 @@ const en = {
     call: "Call",
     write: "Write",
     waIntro: "Hello GA Design Studio, I would like to discuss a project.",
+    sketch: "Your project, drawn as you write",
+    sketchDone: "Ready to build",
+    stamp: "Sent",
   },
   footer: {
     tagline: "Creativity · Values · Freedom",
     rights: "All rights reserved.",
     top: "Back to top",
+    studioTime: "Studio time, Dhule",
+    open: "Open now",
+    closed: "Closed now",
+    hours: "Mon to Sat · 10:00 to 19:00",
   },
 };
 
@@ -298,6 +311,8 @@ const mr: Dict = {
     hq: "स्टुडिओ · मुख्यालय",
     site: "प्रकल्प",
     sea: "अरबी समुद्र",
+    km: "किमी स्टुडिओपासून",
+    all: "चार शहरे. एक स्टुडिओ.",
   },
   contact: {
     label: "संपर्क",
@@ -317,11 +332,18 @@ const mr: Dict = {
     call: "फोन करा",
     write: "ईमेल करा",
     waIntro: "नमस्कार जी ए डिझाईन स्टुडिओ, मला एका प्रकल्पाबद्दल चर्चा करायची आहे.",
+    sketch: "तुम्ही लिहिता तसा तुमचा प्रकल्प आकार घेतो",
+    sketchDone: "उभारणीसाठी तयार",
+    stamp: "पाठवले",
   },
   footer: {
     tagline: "सर्जनशीलता · मूल्ये · स्वातंत्र्य",
     rights: "सर्व हक्क राखीव.",
     top: "वर जा",
+    studioTime: "स्टुडिओची वेळ, धुळे",
+    open: "आता सुरू",
+    closed: "आता बंद",
+    hours: "सोम ते शनि · १०:०० ते १९:००",
   },
 };
 
